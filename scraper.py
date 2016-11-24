@@ -17,7 +17,7 @@ def create_ftp_path(base_ftp_path, folderlist):
 def parse_filename(base_path, url):
     try:
         parts = url.split('/')
-        fname = parts[-2]
+        fname = parts[-2] + ".pdf"
         folders = create_ftp_path(base_path, parts)
     except IndexError as e:
         raise UserWarning('skip this one')
