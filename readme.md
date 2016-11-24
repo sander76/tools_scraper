@@ -1,0 +1,1 @@
+Scraper for mkdocs site to generate pdf's from the mkdocs generated pages.
