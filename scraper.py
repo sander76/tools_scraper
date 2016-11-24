@@ -20,10 +20,8 @@ def parse_filename(base_path, url):
         fname = parts[-2]
         folders = create_ftp_path(base_path, parts)
     except IndexError as e:
-        logging.debug(e)
         raise UserWarning('skip this one')
     else:
-        logging.debug(fname)
         return fname, folders
 
 
@@ -65,5 +63,6 @@ if __name__ == "__main__":
 
     for prs in parselist:
         create_folder(prs[2])
-        make_pdf(prs[0],prs[1],prs[2])
         logging.debug("{} - {} - {}".format(prs[0], prs[1], prs[2]))
+        make_pdf(prs[0],prs[1],prs[2])
+
