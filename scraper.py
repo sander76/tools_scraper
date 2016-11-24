@@ -5,6 +5,8 @@ import logging
 import argparse
 from shutil import rmtree
 
+from create_pdf import make_pdf
+
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -63,4 +65,5 @@ if __name__ == "__main__":
 
     for prs in parselist:
         create_folder(prs[2])
+        make_pdf(prs[0],prs[1],prs[2])
         logging.debug("{} - {} - {}".format(prs[0], prs[1], prs[2]))
