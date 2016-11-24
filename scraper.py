@@ -5,9 +5,8 @@ import logging
 import argparse
 from shutil import rmtree
 
-from create_pdf import make_pdf
 
-logging.basicConfig(level=logging.DEBUG)
+from logger.mylogger import setup_logging
 
 
 def create_ftp_path(base_ftp_path, folderlist):
@@ -49,7 +48,11 @@ parser.add_argument("site", help="the site to scrape")
 parser.add_argument("build_folder", help="output base folder for generated pdfs")
 
 if __name__ == "__main__":
+    setup_logging("logger/log_config.json")
+    lgr = logging.getLogger(__name__)
+
     args = parser.parse_args()
+    from create_pdf import make_pdf
     clear_base_folder(args.build_folder)
     dom = parse(args.site).getroot()
     links = dom.cssselect('.dropdown-menu a')
