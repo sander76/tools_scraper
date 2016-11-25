@@ -52,7 +52,7 @@ parser.add_argument("user")
 parser.add_argument("passwd")
 parser.add_argument("pdf_source_folder")
 
-parser.add_argument("")
+
 if __name__ == "__main__":
     setup_logging("logger/log_config.json")
     lgr = logging.getLogger(__name__)
