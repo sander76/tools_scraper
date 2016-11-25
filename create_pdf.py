@@ -14,7 +14,8 @@ def make_pdf(url,filename,file_save_location):
     except MemoryError as e:
         lgr.error("Unable to create pdf from: {}".format(url))
     except Exception as e:
-        lgr.exception(e)
+        lgr.error("Unable to create pdf from: {}".format(url))
+        lgr.error(e)
 
 
 
