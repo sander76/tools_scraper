@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     from create_pdf import make_pdf
-
+    lgr.error("Starting the log.")
     clear_base_folder(args.build_folder)
     dom = parse(args.site).getroot()
     links = dom.cssselect('.dropdown-menu a')
