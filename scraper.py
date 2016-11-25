@@ -50,7 +50,6 @@ parser.add_argument("ftp_address")
 parser.add_argument("ftp_folder")
 parser.add_argument("user")
 parser.add_argument("passwd")
-parser.add_argument("pdf_source_folder")
 
 
 if __name__ == "__main__":
@@ -80,5 +79,5 @@ if __name__ == "__main__":
                            args.ftp_folder,
                            args.user,
                            args.passwd,
-                           args.pdf_source_folder)
+                           args.build_folder)
     uploader.searchpdf()
