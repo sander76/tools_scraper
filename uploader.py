@@ -30,9 +30,9 @@ class FtpUploader:
                 ext = os.path.splitext(file)
                 if ext[1] == '.pdf':
                     # found a pdf. Upload it !
-                    rel_path = self.create_ftp_path(rel)
-                    source_path = os.path.join(root, file)
-                    self.upload(source_path, rel_path, file)
+                    rel_path = self.create_ftp_path(rel).encode('utf-8')
+                    source_path = os.path.join(root, file).encode('utf-8')
+                    self.upload(source_path, rel_path, file.encode('utf-8'))
                     # print(rel)
 
     def upload(self, source, target, file):
