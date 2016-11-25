@@ -36,6 +36,9 @@ class FtpUploader:
                     # print(rel)
 
     def upload(self, source, target, file):
+        source = source.encode()
+        target=target.encode()
+        file = "STOR {}".format(file).encode()
         # change to the appropriate ftp folder.
         try:
             self.ftp.cwd(target)
@@ -43,7 +46,7 @@ class FtpUploader:
             lgr.error("Error occurred change to folder: {}".format(target))
             raise
         with open(source, 'rb') as fl:
-            self.ftp.storbinary('STOR {}'.format(file), fl)
+            self.ftp.storbinary(file, fl)
         print(self.ftp.retrlines('LIST'))
 
     def create_ftp_path(self, rel_path):
