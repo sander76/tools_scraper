@@ -5,8 +5,8 @@ import logging
 import argparse
 from shutil import rmtree
 
-
 from logger.mylogger import setup_logging
+from uploader import FtpUploader
 
 
 def create_ftp_path(base_ftp_path, folderlist):
@@ -46,13 +46,20 @@ def clear_base_folder(base_folder):
 parser = argparse.ArgumentParser()
 parser.add_argument("site", help="the site to scrape")
 parser.add_argument("build_folder", help="output base folder for generated pdfs")
+parser.add_argument("ftp_address")
+parser.add_argument("ftp_folder")
+parser.add_argument("user")
+parser.add_argument("passwd")
+parser.add_argument("pdf_source_folder")
 
+parser.add_argument("")
 if __name__ == "__main__":
     setup_logging("logger/log_config.json")
     lgr = logging.getLogger(__name__)
 
     args = parser.parse_args()
     from create_pdf import make_pdf
+
     clear_base_folder(args.build_folder)
     dom = parse(args.site).getroot()
     links = dom.cssselect('.dropdown-menu a')
@@ -67,5 +74,11 @@ if __name__ == "__main__":
     for prs in parselist:
         create_folder(prs[2])
         logging.debug("{} - {} - {}".format(prs[0], prs[1], prs[2]))
-        make_pdf(prs[0],prs[1],prs[2])
+        make_pdf(prs[0], prs[1], prs[2])
 
+    uploader = FtpUploader(args.ftp_address,
+                           args.ftp_folder,
+                           args.user,
+                           args.passwd,
+                           args.pdf_source_folder)
+    uploader.searchpdf()
