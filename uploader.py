@@ -37,7 +37,7 @@ class FtpUploader:
 
     def upload(self, source, target, file):
         source = source.encode()
-        target=target.encode()
+        #target=target.encode()
         file = "STOR {}".format(file)
         file = file.encode()
         # change to the appropriate ftp folder.

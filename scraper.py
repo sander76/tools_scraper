@@ -75,9 +75,9 @@ if __name__ == "__main__":
         logging.debug("{} - {} - {}".format(prs[0], prs[1], prs[2]))
         make_pdf(prs[0], prs[1], prs[2])
 
-    uploader = FtpUploader(args.ftp_address,
-                           args.ftp_folder,
-                           args.user,
-                           args.passwd,
-                           args.build_folder)
-    uploader.searchpdf()
+    # uploader = FtpUploader(args.ftp_address,
+    #                        args.ftp_folder,
+    #                        args.user,
+    #                        args.passwd,
+    #                        args.build_folder)
+    # uploader.searchpdf()
