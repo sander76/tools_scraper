@@ -46,10 +46,6 @@ def clear_base_folder(base_folder):
 parser = argparse.ArgumentParser()
 parser.add_argument("site", help="the site to scrape")
 parser.add_argument("build_folder", help="output base folder for generated pdfs")
-parser.add_argument("ftp_address")
-parser.add_argument("ftp_folder")
-parser.add_argument("user")
-parser.add_argument("passwd")
 
 
 if __name__ == "__main__":
@@ -75,9 +71,3 @@ if __name__ == "__main__":
         logging.debug("{} - {} - {}".format(prs[0], prs[1], prs[2]))
         make_pdf(prs[0], prs[1], prs[2])
 
-    # uploader = FtpUploader(args.ftp_address,
-    #                        args.ftp_folder,
-    #                        args.user,
-    #                        args.passwd,
-    #                        args.build_folder)
-    # uploader.searchpdf()
