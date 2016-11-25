@@ -1,6 +1,9 @@
 import argparse
 from ftplib import FTP
 import os
+import logging
+
+lgr = logging.getLogger(__name__)
 
 
 def walker(source_folder):
@@ -34,7 +37,11 @@ class FtpUploader:
 
     def upload(self, source, target, file):
         # change to the appropriate ftp folder.
-        self.ftp.cwd(target)
+        try:
+            self.ftp.cwd(target)
+        except Exception:
+            lgr.error("Error occurred change to folder: {}".format(target))
+            raise
         with open(source, 'rb') as fl:
             self.ftp.storbinary('STOR {}'.format(file), fl)
         print(self.ftp.retrlines('LIST'))
