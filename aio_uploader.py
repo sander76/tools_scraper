@@ -18,7 +18,7 @@ parser.add_argument("passwd")
 if __name__=="__main__":
     args = parser.parse_args()
     loop = asyncio.get_event_loop()
-    tasks = (upload(args.ftp_address,21,args.user,args.passwd))
+    tasks = (upload(args.ftp_address,21,args.user,args.passwd),)
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
 
