@@ -1,7 +1,7 @@
 import os
 from weasyprint import HTML
 import logging
-
+import requests
 lgr = logging.getLogger(__name__)
 
 def make_pdf(url,filename,file_save_location):
