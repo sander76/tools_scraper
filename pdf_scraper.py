@@ -80,5 +80,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     lgr.error("Starting the log.")
 
-    Scraper(args.site, args.pdf_server, args.output_folder).scrape().create_pdfs()
+    scr = Scraper(args.site, args.pdf_server, args.output_folder)
+    scr.scrape()
+    scr.create_pdfs()
 
