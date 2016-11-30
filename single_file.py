@@ -1,13 +1,20 @@
 import argparse
-
+import json
+import logging
 from pdf_scraper import Scraper
 
 parser = argparse.ArgumentParser()
-parser.add_argument("page", help="the site to scrape")
-parser.add_argument("pdf_server")
-parser.add_argument("output_folder", help="output base folder for generated pdfs")
+parser.add_argument("jsfile", help="the site to scrape")
 
-if __name__=="__main__":
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     args = parser.parse_args()
-    pdfer = Scraper('',args.pdf_server,args.output_folder)
-    pdfer.create_pdf(args.page,args.output_folder+'/test.pdf')
+    config_file = args.json
+    with open(config_file) as fl:
+        _js=json.load(fl)
+    logging.DEBUG(_js['site'])
+    logging.DEBUG(_js['pdf_scraper'])
+    logging.DEBUG(_js['output'])
+
+    pdfer = Scraper('', _js['pdf_scraper'], _js['output'])
+    pdfer.create_pdf(_js['site'], _js['output'] + '/test.pdf')
