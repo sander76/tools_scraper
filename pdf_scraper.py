@@ -15,26 +15,29 @@ class PdfSource:
         self.output_full = os.path.join(output_path, output_filename)
 
 
+def make_filename(link_text: str):
+    return link_text.lstrip('_') + ".pdf"
+
+
 class Scraper:
     def __init__(self, site, pdf_server, output_folder):
         self.site = site
         self.pdf_server = pdf_server
         self.output_folder = output_folder
         self.parse_list = []
-        #self.scrape()
-
-
+        # self.scrape()
 
     def scrape(self):
         dom = parse(self.site).getroot()
         links = dom.cssselect('.dropdown-menu a')
         for link in links:
-            fname = link.text + ".pdf"
+            fname = make_filename(link.text)
             try:
                 self.parse_list.append(
                     PdfSource(fname, self.parse_filename(link.attrib['href']), self.parse_url(link.attrib['href'])))
             except UserWarning:
                 pass
+
 
     def create_pdfs(self):
         for itm in self.parse_list:
@@ -43,11 +46,14 @@ class Scraper:
     def create_pdf(self, url, output):
         addr = '{}/url'.format(self.pdf_server)
         url = {'url': url}
-        r = requests.get(addr,params=url, stream=True)
-        with open(output, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:  # filter out keep-alive new chunks
-                    f.write(chunk)
+        r = requests.get(addr, params=url, stream=True)
+        if r.status_code == 200:
+            with open(output, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+        else:
+            lgr.error("unable to create pdf from: {}".format(url))
 
     def parse_url(self, url):
         url = urljoin(self.site, url)
@@ -83,4 +89,3 @@ if __name__ == "__main__":
     scr = Scraper(args.site, args.pdf_server, args.output_folder)
     scr.scrape()
     scr.create_pdfs()
-
