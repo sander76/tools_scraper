@@ -16,7 +16,7 @@ class PdfSource:
 
 
 def make_filename(link_text: str):
-    return link_text.lstrip('_') + ".pdf"
+    return link_text.lstrip('_ ') + ".pdf"
 
 
 class Scraper:
