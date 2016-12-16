@@ -1,17 +1,34 @@
 import os
+import io
 from urllib.parse import urljoin
+
+import time
 from lxml.html import parse
 import logging
 import argparse
 import requests
+
+import make_booklet
 from logger.mylogger import setup_logging
+
+
+def create_folder(folder):
+    if os.path.exists(folder):
+        pass
+    else:
+        os.makedirs(folder)
 
 
 class PdfSource:
     def __init__(self, output_filename, output_path, url):
         self.output_filename = output_filename
         self.output_folder = output_path
+        create_folder(output_path)
         self.url = url
+        if "datasheet" in self.output_filename or "data sheet" in self.output_filename:
+            self.datasheet = True
+        else:
+            self.datasheet = False
         self.output_full = os.path.join(output_path, output_filename)
 
 
@@ -20,16 +37,17 @@ def make_filename(link_text: str):
 
 
 class Scraper:
-    def __init__(self, site, pdf_server, output_folder):
+    def __init__(self, site, pdf_server, output_folder, css_selector=".dropdown-menu a"):
         self.site = site
         self.pdf_server = pdf_server
         self.output_folder = output_folder
+        self.css_selector = css_selector
         self.parse_list = []
         # self.scrape()
 
     def scrape(self):
         dom = parse(self.site).getroot()
-        links = dom.cssselect('.dropdown-menu a')
+        links = dom.cssselect(self.css_selector)
         for link in links:
             fname = make_filename(link.text)
             try:
@@ -38,22 +56,44 @@ class Scraper:
             except UserWarning:
                 pass
 
-
     def create_pdfs(self):
         for itm in self.parse_list:
-            self.create_pdf(itm.url, itm.output_full)
+            # time.sleep(5)
+            if itm.datasheet:
+                self.create_booklet(itm.url, itm.output_full)
+            else:
+                self.create_pdf(itm.url, itm.output_full)
 
-    def create_pdf(self, url, output):
+    def _get_pdf(self, url):
         addr = '{}/url'.format(self.pdf_server)
         url = {'url': url}
         r = requests.get(addr, params=url, stream=True)
-        if r.status_code == 200:
+        assert r.status_code == 200
+        return r
+
+    def create_pdf(self, url, output):
+        try:
+            r = self._get_pdf(url)
+        except AssertionError as e:
+            lgr.error("unable to create pdf from: {}".format(url))
+        else:
             with open(output, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=1024):
                     if chunk:  # filter out keep-alive new chunks
                         f.write(chunk)
-        else:
+
+    def create_booklet(self, url, output):
+        try:
+            r = self._get_pdf(url)
+        except AssertionError as e:
             lgr.error("unable to create pdf from: {}".format(url))
+        else:
+            img_io = io.BytesIO()  # 3.5
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    img_io.write(chunk)
+            img_io.seek(0)
+            make_booklet.make_booklet(img_io, output)
 
     def parse_url(self, url):
         url = urljoin(self.site, url)

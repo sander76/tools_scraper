@@ -1,0 +1,5 @@
+{
+    "site":"http://193.67.229.68:8000/powerview/_troubleshooting/index.html",
+    "pdf_scraper":"http://172.16.4.143:5001",
+    "output":"c:/temp/pdf/"
+}

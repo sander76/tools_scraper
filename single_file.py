@@ -17,4 +17,5 @@ if __name__ == "__main__":
     lgr.debug(_js['output'])
 
     pdfer = Scraper('', _js['pdf_scraper'], _js['output'])
-    pdfer.create_pdf(_js['site'], _js['output'] + '/test.pdf')
+    for fl in range(100):
+        pdfer.create_pdf(_js['site'], _js['output'] + '/test.pdf')
