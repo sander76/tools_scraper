@@ -1,16 +1,16 @@
 import os
 import io
-from urllib.parse import urljoin
 
 import time
-from lxml.html import parse
 import logging
 import argparse
 import requests
-
 import make_booklet
-from logger.mylogger import setup_logging
 
+from urllib.parse import urljoin
+from lxml.html import parse
+from logger.mylogger import setup_logging
+from urllib.request import urlopen
 
 def create_folder(folder):
     if os.path.exists(folder):
@@ -46,7 +46,7 @@ class Scraper:
         # self.scrape()
 
     def scrape(self):
-        dom = parse(self.site).getroot()
+        dom = parse(urlopen(self.site)).getroot()
         links = dom.cssselect(self.css_selector)
         for link in links:
             fname = make_filename(link.text)
