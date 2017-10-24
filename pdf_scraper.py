@@ -12,6 +12,7 @@ from lxml.html import parse
 from logger.mylogger import setup_logging
 from urllib.request import urlopen
 
+
 def create_folder(folder):
     if os.path.exists(folder):
         pass
@@ -37,7 +38,8 @@ def make_filename(link_text: str):
 
 
 class Scraper:
-    def __init__(self, site, pdf_server, output_folder, css_selector=".dropdown-menu a"):
+    def __init__(self, site, pdf_server, output_folder,
+                 css_selector=".dropdown-menu a"):
         self.site = site
         self.pdf_server = pdf_server
         self.output_folder = output_folder
@@ -52,7 +54,8 @@ class Scraper:
             fname = make_filename(link.text)
             try:
                 self.parse_list.append(
-                    PdfSource(fname, self.parse_filename(link.attrib['href']), self.parse_url(link.attrib['href'])))
+                    PdfSource(fname, self.parse_filename(link.attrib['href']),
+                              self.parse_url(link.attrib['href'])))
             except UserWarning:
                 pass
 
@@ -60,7 +63,8 @@ class Scraper:
         for itm in self.parse_list:
             # time.sleep(5)
             if itm.datasheet:
-                self.create_booklet(itm.url, itm.output_full)
+                # self.create_booklet(itm.url, itm.output_full)
+                self.create_pdf(itm.url, itm.output_full)
             else:
                 self.create_pdf(itm.url, itm.output_full)
 
@@ -117,7 +121,8 @@ class Scraper:
 parser = argparse.ArgumentParser()
 parser.add_argument("site", help="the site to scrape")
 parser.add_argument("pdf_server")
-parser.add_argument("output_folder", help="output base folder for generated pdfs")
+parser.add_argument("output_folder",
+                    help="output base folder for generated pdfs")
 
 if __name__ == "__main__":
     setup_logging("logger/log_config.json")
