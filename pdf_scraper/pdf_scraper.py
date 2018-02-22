@@ -32,8 +32,7 @@ class PdfSource:
         create_folder(output_path)
         self.pdf_server = '{}/url'.format(pdf_server)
         self.url = url
-        self.output_full = PurePath(output_path,
-                                    pdf_filename)
+        self.output_full = output_path / pdf_filename
 
     def _get_pdf(self, url):
         """Makes a request to the pdf creation server. Returns a response
@@ -52,10 +51,17 @@ class PdfSource:
             lgr.error("unable to create pdf from: {}".format(self.url))
             lgr.exception(err)
         else:
-            with open(self.output_full, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=1024):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
+            self.write_to_file(r)
+            # with open(self.output_full, 'wb') as fl:
+            #     for chunk in r.iter_content(chunk_size=1024):
+            #         if chunk:  # filter out keep-alive new chunks
+            #             fl.write(chunk)
+
+    def write_to_file(self, stream):
+        with open(self.output_full, 'wb') as fl:
+            for chunk in stream.iter_content(chunk_size=1024):
+                if chunk:  # filter out keep-alive new chunks
+                    fl.write(chunk)
 
 
 class Scraper:
