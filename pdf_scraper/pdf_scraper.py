@@ -85,7 +85,9 @@ class Scraper:
             self._make_pdf(_fname, _location, _url, self.pdf_server)
 
     def _make_pdf(self, _filename, location, url, server):
-        pdf_source = PdfSource(_filename, location, url, server)
+        # temporarily replacing the filename with a generic one.
+
+        pdf_source = PdfSource('document.pdf', location, url, server)
         pdf_source.create_pdf()
 
     def make_url(self, full_path: PurePath):
