@@ -1,7 +1,9 @@
 from pathlib import PurePath
 
+import pytest
+
 from pdf_scraper.helpers import traverse_server_folders, make_filename, \
-    get_site_part
+    get_site_part, ScraperError
 
 
 def test_traverse_folder():
@@ -16,6 +18,12 @@ def test_traverse_folder():
 
     _path = folders[1]
     assert 'level_2_1' == _path.name
+
+
+def test_traverse_folder_non_existing_path():
+    base_path = 'fake_path'
+    with pytest.raises(ScraperError):
+        traverse_server_folders(base_path)
 
 
 def test_make_file_name():

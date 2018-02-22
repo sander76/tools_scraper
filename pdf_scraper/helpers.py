@@ -20,7 +20,7 @@ def traverse_server_folders(base_folder) -> [PurePath]:
         traverse(base_folder)
         return folders
     else:
-        raise ScraperError("folder does not exist {}".format(base_folder))
+        raise ScraperError("folder does not exist: {}".format(base_folder))
 
 
 def make_filename(link_text: PurePath):

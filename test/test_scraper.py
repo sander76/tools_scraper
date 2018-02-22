@@ -23,6 +23,11 @@ def test_make_url(fake_scraper):
     assert val == WEB_BASE_URL + _url + '/index.html'
     assert val == 'https://192.168.2.9/api/test/index.html'
 
+def test_wrong_formed_url(fake_scraper):
+    _url = '/api/test'
+    fake_scraper.site ='htp://test'
+    val = fake_scraper.make_url(PurePath(SITE_FOLDER +_url))
+
 
 def test_make_pdf(fake_scraper):
     mock = Mock()
