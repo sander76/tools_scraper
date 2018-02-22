@@ -6,9 +6,9 @@ from urllib.parse import urljoin
 
 import requests
 
-from logger.mylogger import setup_logging
 from pdf_scraper.helpers import traverse_server_folders, make_filename, \
     get_site_part
+from pdf_scraper.logger.mylogger import setup_logging
 
 lgr = logging.getLogger(__name__)
 
