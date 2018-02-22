@@ -1,23 +1,24 @@
-import argparse
+import logging
 import logging
 import os
-from pathlib import PurePath
+from pathlib import PurePath, Path
 from urllib.parse import urljoin
 
 import requests
 
 from pdf_scraper.helpers import traverse_server_folders, make_filename, \
     get_site_part
-from pdf_scraper.logger.mylogger import setup_logging
 
 lgr = logging.getLogger(__name__)
 
 
-def create_folder(folder):
-    if os.path.exists(folder):
+def create_folder(folder: PurePath):
+    _pth = Path(folder)
+    if _pth.exists():
         pass
     else:
-        os.makedirs(folder)
+        lgr.debug("Path does exist: {}".format(_pth))
+        _pth.mkdir(parents=True)
 
 
 class PdfSource:
@@ -33,10 +34,10 @@ class PdfSource:
         create_folder(output_path)
         self.pdf_server = '{}/url'.format(pdf_server)
         self.url = url
-        if "datasheet" in self.output_filename or "data sheet" in self.output_filename:
-            self.datasheet = True
-        else:
-            self.datasheet = False
+        # if "datasheet" in self.output_filename or "data sheet" in self.output_filename:
+        #     self.datasheet = True
+        # else:
+        #     self.datasheet = False
         self.output_full = os.path.join(output_path, pdf_filename)
 
     def _get_pdf(self, url):
@@ -78,10 +79,14 @@ class Scraper:
         self.locations = []
 
     def scrape(self):
+        lgr.debug("traversing base folder: {}".format(self.site_folder))
         self.locations = traverse_server_folders(self.site_folder)
         for _location in self.locations:
             _fname = make_filename(_location)
             _url = self.make_url(_location)
+            lgr.debug(
+                "making pdf from: location: {} filename: {} url: {}".format(
+                    _location, _fname, _url))
             self._make_pdf(_fname, _location, _url, self.pdf_server)
 
     def _make_pdf(self, _filename, location, url, server):
@@ -93,5 +98,3 @@ class Scraper:
         _path = get_site_part(full_path, self.site_folder)
         url = urljoin(self.site, '/'.join(_path.parts))
         return url + '/index.html'
-
-

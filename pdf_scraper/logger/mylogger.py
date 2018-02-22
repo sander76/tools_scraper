@@ -1,11 +1,10 @@
 import json
-import os
 import logging.config
+import os
 
 
-
-
-def setup_logging(default_path='logger.json', default_level=logging.INFO, env_key='LOG_CFG'):
+def setup_logging(default_path='logger.json', default_level=logging.INFO,
+                  env_key='LOG_CFG'):
     """Setup logger configuration
 
     http://victorlin-blog.logdown.com/posts/2012/08/26/good-logger-practice-in-python
