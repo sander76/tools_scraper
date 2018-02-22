@@ -1,6 +1,4 @@
 import logging
-import logging
-import os
 from pathlib import PurePath, Path
 from urllib.parse import urljoin
 
@@ -34,11 +32,8 @@ class PdfSource:
         create_folder(output_path)
         self.pdf_server = '{}/url'.format(pdf_server)
         self.url = url
-        # if "datasheet" in self.output_filename or "data sheet" in self.output_filename:
-        #     self.datasheet = True
-        # else:
-        #     self.datasheet = False
-        self.output_full = os.path.join(output_path, pdf_filename)
+        self.output_full = PurePath(output_path,
+                                    pdf_filename)
 
     def _get_pdf(self, url):
         """Makes a request to the pdf creation server. Returns a response
